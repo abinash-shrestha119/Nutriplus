@@ -1,0 +1,63 @@
+.navbar-wrapper {
+  background-color: #0f0f0f;
+}
+
+.navbar-wrapper .dropdown-item {
+  color: #93b1a6;
+}
+
+.admin-nav .dropdown-menu .dropdown-item,
+.dropdown-menu .dropdown-item.active {
+  background: transparent;
+}
+
+.navbar-wrapper .dropdown-menu,
+.admin-nav .dropdown-menu {
+  border: none !important;
+  color: #93b1a6 !important;
+  box-shadow: 5px 5px 21px #252525, -5px -5px 21px #252525;
+}
+
+.navbar-wrapper .dropdown-item:hover {
+  background-color: #93b1a6;
+}
+
+.navbar-brand-wrapper {
+  font-family: logoFont;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-wrapper .navbar-toggler {
+  border: none;
+}
+
+.navbar-wrapper .navbar-toggler:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.navbar-wrapper .navbar-toggler .navbar-toggler-icon {
+  background-image: url("../../assets/icons/list.svg") !important;
+}
+
+.navbar-brand-wrapper img {
+  width: 35px;
+  margin-right: 10px;
+}
+
+.navbar-wrapper .navbar-nav a {
+  color: #93b1a6;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  font-family: textFont;
+}
+
+.navbar-wrapper .navbar-nav a:hover {
+  color: white;
+}
+
+.navbar-wrapper .navbar-nav a svg {
+  margin-right: 7px;
+}

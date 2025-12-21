@@ -1,0 +1,5 @@
+.product-card .cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
