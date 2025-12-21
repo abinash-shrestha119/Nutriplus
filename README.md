@@ -1,10 +1,10 @@
-# Pro Supplements Store - eCommerce Platform
+# Nutriplus - eCommerce Platform
 
 > eCommerce platform built with the MERN stack & Redux.
 
-<img src="./frontend/public/images/screens.png">
 
-It is a full-featured shopping cart with PayPal & credit/debit payments. See it in action at https://pro-supplements.onrender.com
+
+It is a full-featured shopping cart with khalti payment integration. 
 
 <!-- toc -->
 
@@ -31,13 +31,10 @@ It is a full-featured shopping cart with PayPal & credit/debit payments. See it 
 - Admin Order details page
 - Mark orders as delivered option
 - Checkout process (shipping, payment method, etc)
-- PayPal / credit card integration
+- khalti payment integration
 - Database seeder (products & users)
 
-## Usage
 
-- Create a MongoDB database and obtain your `MongoDB URI` - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
-- Create a PayPal account and obtain your `Client ID` - [PayPal Developer](https://developer.paypal.com/)
 
 ### Env Variables
 
@@ -48,7 +45,6 @@ NODE_ENV = development
 PORT = 5000
 MONGO_URI = your mongodb uri
 JWT_SECRET = 'abc123'
-PAYPAL_CLIENT_ID = your paypal client id
 PAGINATION_LIMIT = 8
 ```
 
@@ -99,10 +95,7 @@ Sample User Logins
 admin@email.com (Admin)
 123456
 
-john@email.com (Customer)
-123456
-
-jane@email.com (Customer)
+basanta@email.com(user)
 123456
 ```
 
