@@ -1,10 +1,7 @@
-# Nutriplus - eCommerce Platform
 
 > eCommerce platform built with the MERN stack & Redux.
 
 
-
-It is a full-featured shopping cart with khalti payment integration. 
 
 <!-- toc -->
 
@@ -33,7 +30,6 @@ It is a full-featured shopping cart with khalti payment integration.
 - Checkout process (shipping, payment method, etc)
 - khalti payment integration
 - Database seeder (products & users)
-
 
 
 ### Env Variables
@@ -95,8 +91,6 @@ Sample User Logins
 admin@email.com (Admin)
 123456
 
-basanta@email.com(user)
-123456
-```
+
 
 ---
