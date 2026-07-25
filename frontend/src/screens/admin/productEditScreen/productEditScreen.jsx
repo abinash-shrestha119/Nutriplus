@@ -25,12 +25,11 @@ const ProductEditScreen = () => {
   const {
     data: product,
     isLoading,
-    refetch,
     error,
   } = useGetProductDetailsQuery(productId);
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
-  const [uploadProduct, { isLoading: loadingUpload }] =
+  const [uploadProduct] =
     useUploadProductImageMutation();
   const navigate = useNavigate();
 
