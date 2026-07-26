@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://nutriplus-eight.vercel.app/",
+    origin: "https://nutriplus-eight.vercel.app",
     credentials: true,
   })
 );
