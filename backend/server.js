@@ -24,7 +24,12 @@ app.use(express.urlencoded({ extended: true }));
 // Cookie Parser Middleware
 app.use(cookieParser());
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://nutriplus-eight.vercel.app/",
+    credentials: true,
+  })
+);
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);

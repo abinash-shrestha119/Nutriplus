@@ -94,3 +94,6 @@ admin@email.com (Admin)
 
 
 ---
+https://nutriplus-backend.onrender.com
+
+https://nutriplus-eight.vercel.app/
