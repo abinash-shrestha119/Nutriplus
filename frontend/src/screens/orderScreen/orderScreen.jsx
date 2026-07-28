@@ -42,7 +42,12 @@ const OrderScreen = () => {
     useInitiateKhaltiPaymentMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
-
+  const isOrderOwner =
+    userInfo &&
+    order?.user &&
+    (order.user._id?.toString() === userInfo._id?.toString() ||
+      order.user.toString() === userInfo._id?.toString());
+  const canPay = !userInfo?.isAdmin && isOrderOwner && !order?.isPaid;
 
   useEffect(() => {
   if (order?.isPaid) {
@@ -154,7 +159,7 @@ const OrderScreen = () => {
                 <Row><Col>Total</Col><Col>{order.totalPrice}</Col></Row>
               </ListGroup.Item>
 
-              {!order.isPaid && (
+              {canPay && (
                 <ListGroup.Item className="list-item">
                   {loadingKhalti && <Loader />}
                   <Button
@@ -164,6 +169,14 @@ const OrderScreen = () => {
                   >
                     Pay with Khalti
                   </Button>
+                </ListGroup.Item>
+              )}
+
+              {!order.isPaid && !canPay && userInfo?.isAdmin && (
+                <ListGroup.Item className="list-item">
+                  <Message variant="info">
+                    Admins can view this order but cannot pay it.
+                  </Message>
                 </ListGroup.Item>
               )}
 

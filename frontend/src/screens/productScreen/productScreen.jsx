@@ -45,6 +45,11 @@ const ProductScreen = () => {
     useCreateReviewMutation();
 
   const addToCartHandler = () => {
+    if (userInfo?.isAdmin) {
+      toast.error("Admins cannot place orders.");
+      return;
+    }
+
     dispatch(addToCart({ ...product, qty }));
     navigate("/cart");
   };
@@ -153,10 +158,10 @@ const ProductScreen = () => {
                     <Button
                       className="btn-block card-button-style"
                       type="button"
-                      disabled={product.countInStock === 0}
+                      disabled={product.countInStock === 0 || userInfo?.isAdmin}
                       onClick={addToCartHandler}
                     >
-                      Add to Cart
+                      {userInfo?.isAdmin ? "Admins cannot purchase" : "Add to Cart"}
                     </Button>
                   </ListGroup.Item>
                 </ListGroup>

@@ -14,6 +14,7 @@ import {
 } from "react-bootstrap";
 import { FaTrashAlt } from "react-icons/fa";
 import Message from "../../components/message/message";
+import { toast } from "react-toastify";
 
 import "../productScreen/productScreen.css";
 import "../../components/product/product.css";
@@ -25,6 +26,7 @@ const CartScreen = () => {
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
+  const { userInfo } = useSelector((state) => state.auth);
 
   const addToCartHandler = async (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
@@ -35,6 +37,11 @@ const CartScreen = () => {
   };
 
   const checkoutHandler = () => {
+    if (userInfo?.isAdmin) {
+      toast.error("Admins cannot place orders.");
+      return;
+    }
+
     navigate("/login?redirect=/shipping");
   };
 
@@ -118,10 +125,10 @@ const CartScreen = () => {
               <Button
                 type="button"
                 className="btn-block card-button-style"
-                disabled={cartItems.length === 0}
+                disabled={cartItems.length === 0 || userInfo?.isAdmin}
                 onClick={checkoutHandler}
               >
-                Proceed to Checkout
+                {userInfo?.isAdmin ? "Admins cannot checkout" : "Proceed to Checkout"}
               </Button>
             </ListGroup.Item>
           </ListGroup>

@@ -15,6 +15,13 @@ const initiateKhalti = asyncHandler(async (req, res) => {
     throw new Error("Order not found");
   }
 
+  const isOrderOwner = order.user.toString() === req.user._id.toString();
+
+  if (req.user.isAdmin || !isOrderOwner) {
+    res.status(403);
+    throw new Error("You can only pay for your own orders.");
+  }
+
   const payload = buildKhaltiPaymentPayload(order, req);
 
   // 1️⃣ Initiate payment
@@ -107,6 +114,11 @@ const khaltiCallback = asyncHandler(async (req, res) => {
 const addOrderItems = asyncHandler(async (req, res) => {
   const { orderItems, shippingAddress, paymentMethod } = req.body;
 
+  if (req.user.isAdmin) {
+    res.status(403);
+    throw new Error("Admins cannot place orders.");
+  }
+
   if (orderItems && orderItems.length === 0) {
     res.status(400);
     throw new Error("No order items");
@@ -169,8 +181,15 @@ const getOrderById = asyncHandler(async (req, res) => {
     "name email"
   );
 
-  if (order) {
+  const isOrderOwner =
+    order?.user?._id?.toString() === req.user._id.toString() ||
+    order?.user?.toString() === req.user._id.toString();
+
+  if (order && (isOrderOwner || req.user.isAdmin)) {
     res.status(200).json(order);
+  } else if (order) {
+    res.status(403);
+    throw new Error("Not authorized to view this order.");
   } else {
     res.status(404);
     throw new Error("Order not found.");
