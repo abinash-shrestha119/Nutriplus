@@ -19,6 +19,7 @@ import Loader from "../../components/loader/loader";
 import {
   useGetOrderDetailsQuery,
   useDeliverOrderMutation,
+  useInitiateKhaltiPaymentMutation,
 } from "../../slices/ordersApiSlice";
 
 
@@ -37,6 +38,9 @@ const OrderScreen = () => {
   const [deliverOrder, { isLoading: loadingDeliver }] =
     useDeliverOrderMutation();
 
+  const [initiateKhaltiPayment, { isLoading: loadingKhalti }] =
+    useInitiateKhaltiPaymentMutation();
+
   const { userInfo } = useSelector((state) => state.auth);
 
 
@@ -49,32 +53,14 @@ const OrderScreen = () => {
   /* =========================
      KHALTI PAYMENT HANDLER
      ========================= */
-const handleKhaltiPayment = async () => {
-  try {
-    const res = await fetch(
-      `/api/orders/${order._id}/khalti/initiate`,
-      {
-        method: "POST", // ✅ MUST be POST
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`, // ✅ REQUIRED
-        },
-      }
-    );
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || "Khalti initiation failed");
+  const handleKhaltiPayment = async () => {
+    try {
+      const { payment_url } = await initiateKhaltiPayment(order._id).unwrap();
+      window.location.href = payment_url;
+    } catch (err) {
+      toast.error(err?.data?.message || err.message);
     }
-
-    // ✅ Redirect to Khalti Hosted Payment Page
-    window.location.href = data.payment_url;
-
-  } catch (error) {
-    toast.error(error.message);
-  }
-};
+  };
 
   const deliverOrderHandler = async () => {
     try {
@@ -170,9 +156,11 @@ const handleKhaltiPayment = async () => {
 
               {!order.isPaid && (
                 <ListGroup.Item className="list-item">
+                  {loadingKhalti && <Loader />}
                   <Button
                     className="btn btn-block card-button-style"
                     onClick={handleKhaltiPayment}
+                    disabled={loadingKhalti}
                   >
                     Pay with Khalti
                   </Button>

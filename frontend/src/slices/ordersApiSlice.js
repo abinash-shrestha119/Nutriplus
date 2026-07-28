@@ -48,6 +48,12 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
       }),
     }),
+    initiateKhaltiPayment: builder.mutation({
+      query: (orderId) => ({
+        url: `${ORDERS_URL}/${orderId}/khalti/initiate`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -59,4 +65,5 @@ export const {
   useGetMyOrdersQuery,
   useGetOrdersQuery,
   useDeliverOrderMutation,
+  useInitiateKhaltiPaymentMutation,
 } = ordersApiSlice;

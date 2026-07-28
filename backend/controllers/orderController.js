@@ -3,6 +3,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
 import { calcPrices } from "../utils/calcPrices.js";
+import { buildKhaltiPaymentPayload, buildKhaltiUrls } from "../utils/Khalti.js";
 
 
 
@@ -14,6 +15,8 @@ const initiateKhalti = asyncHandler(async (req, res) => {
     throw new Error("Order not found");
   }
 
+  const payload = buildKhaltiPaymentPayload(order, req);
+
   // 1️⃣ Initiate payment
   const initiateRes = await fetch(
     "https://a.khalti.com/api/v2/epayment/initiate/",
@@ -23,21 +26,23 @@ const initiateKhalti = asyncHandler(async (req, res) => {
         Authorization: `Key ${process.env.KHALTI_SECRET_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        return_url: `${process.env.BACKEND_URL}/api/orders/khalti/callback`,
-        website_url: process.env.FRONTEND_URL,
-        amount: Math.round(order.totalPrice * 100),
-        purchase_order_id: order._id,
-        purchase_order_name: "Order Payment",
-      }),
+      body: JSON.stringify(payload),
     }
   );
 
-  const data = await initiateRes.json();
+  const responseText = await initiateRes.text();
+  let data = {};
+
+  try {
+    data = responseText ? JSON.parse(responseText) : {};
+  } catch {
+    res.status(502);
+    throw new Error("Invalid response from Khalti payment gateway");
+  }
 
   if (!initiateRes.ok) {
     res.status(400);
-    throw new Error(data.detail || "Khalti initiate failed");
+    throw new Error(data.detail || data.message || "Khalti initiate failed");
   }
 
   // 2️⃣ Redirect user to Khalti
@@ -48,10 +53,11 @@ const initiateKhalti = asyncHandler(async (req, res) => {
 
 const khaltiCallback = asyncHandler(async (req, res) => {
   const { pidx, purchase_order_id, status } = req.query;
+  const { frontendUrl } = buildKhaltiUrls(req);
 
   if (status !== "Completed") {
     return res.redirect(
-      `${process.env.FRONTEND_URL}/order/${purchase_order_id}?payment=failed`
+      `${frontendUrl}/order/${purchase_order_id}?payment=failed`
     );
   }
 
@@ -90,7 +96,7 @@ const khaltiCallback = asyncHandler(async (req, res) => {
   await order.save();
 
   // redirect back to frontend
-  res.redirect(`${process.env.FRONTEND_URL}/order/${order._id}`);
+  res.redirect(`${frontendUrl}/order/${order._id}`);
 });
 
 
