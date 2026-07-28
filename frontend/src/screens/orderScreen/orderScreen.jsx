@@ -175,6 +175,7 @@ const OrderScreen = () => {
               {!order.isPaid && !canPay && userInfo?.isAdmin && (
                 <ListGroup.Item className="list-item">
                   <Message variant="info">
+                    {/* Admins can view this order but cannot pay it. */}
                   </Message>
                 </ListGroup.Item>
               )}
