@@ -32,9 +32,11 @@ export const buildKhaltiUrls = (req) => {
 
   const frontendUrl = normalizeBaseUrl(
     process.env.FRONTEND_URL ||
+      process.env.CLIENT_URL ||
+      process.env.CORS_ORIGIN ||
       getHeaderOrigin(req, "origin") ||
       getHeaderOrigin(req, "referer") ||
-      "http://localhost:3000"
+      "https://nutriplus-eight.vercel.app"
   );
 
   const backendUrl = normalizeBaseUrl(
@@ -42,7 +44,7 @@ export const buildKhaltiUrls = (req) => {
       process.env.APP_URL ||
       host ||
       (req.get?.("host") ? `${req.protocol || "http"}://${req.get("host")}` : "") ||
-      "http://localhost:5000"
+      "https://nutriplus-backend.onrender.com"
   );
 
   return { backendUrl, frontendUrl };
